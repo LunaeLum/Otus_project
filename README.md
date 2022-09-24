@@ -21,7 +21,7 @@
 3. Выполните mysql_install_slave для установки СУБД MySQL в роли slave.
 4. Выполните node_exporter_install для возможности подключения данного сервера к мониторингу prometeus
 5. Выполните mysql_exporter_install для возможности подключения СУБД MySQL к мониторингу prometeus
-6. Настройте скрипт mysql_backup и настройте его повторение в cron
+6. Настройте скрипт backup_mysql и настройте его повторение в cron
 
 Настройка monitoring_backup:
 1. Выполните selinux_firewalld_disable для отключения selinux и firewalld
