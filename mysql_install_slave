@@ -53,14 +53,6 @@ if  [[ $(grep 'server-id' /etc/my.cnf) =~ ^server-id ]]
 				sed -i '$aserver-id=2' /etc/my.cnf
 fi
 
-
-#Creating user for replication 
-echo -e "Creating user for replication"
-echo -e "Enter username"
-read user
-echo $'\n'"Enter password"
-read -s pass
-
 echo $'\n'"Enter root password for mysql"
 mysql -uroot -p --database=mysql -e "CREATE USER '$user'@'%' IDENTIFIED WITH 'caching_sha2_password' BY '$pass';GRANT ALL PRIVILEGES ON *.* TO '$user'@'%' WITH GRANT OPTION"
 
@@ -74,7 +66,7 @@ echo -e  "Enter password of mysql replication user"
 read -s a5
 echo -e  "Enter master binlog file"
 read a6
-echo -e  "Enter master log pass"
+echo -e  "Enter master log pos"
 read a7
 echo -e  "Enter root password for mysql"
 mysql -uroot -p --database=mysql -e "CHANGE MASTER TO MASTER_HOST='$a3', MASTER_USER='$a4', MASTER_PASSWORD='$a5', MASTER_LOG_FILE='$a6', MASTER_LOG_POS=$a7, GET_MASTER_PUBLIC_KEY = 1; start slave"
