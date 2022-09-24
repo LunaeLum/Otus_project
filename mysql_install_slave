@@ -52,6 +52,8 @@ if  [[ $(grep 'server-id' /etc/my.cnf) =~ ^server-id ]]
         else
 				sed -i '$aserver-id=2' /etc/my.cnf
 fi
+systemctl restart mysqld
+sleep 10
 
 echo $'\n'"Enter root password for mysql"
 mysql -uroot -p --database=mysql -e "CREATE USER '$user'@'%' IDENTIFIED WITH 'caching_sha2_password' BY '$pass';GRANT ALL PRIVILEGES ON *.* TO '$user'@'%' WITH GRANT OPTION"
