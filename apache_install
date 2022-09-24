@@ -40,26 +40,23 @@ for (( count=1; count<=$var; count++ ))
                                         exit 2
                         fi
 
-
-cat << EOF > /etc/httpd/conf.d/for_upstream$var.conf
+cat << EOF > /etc/httpd/conf.d/for_upstream$count.conf
 Listen $port
 <VirtualHost *:$port>
 #       ServerName www.example.com
 #       ServerAdmin webmaster@localhost
 DocumentRoot /var/www/html
-ErrorLog /var/log/httpd/error$var.log
-CustomLog /var/log/httpd/access$var.log combined
+ErrorLog /var/log/httpd/error$count.log
+CustomLog /var/log/httpd/access$count.log combined
 </VirtualHost>
 
 ####################################################
 EOF
 
-
 cat << EOF > /var/www/html/index.html
 <h1> Welcome to Apache server on port $port </h1>
 EOF
 
-
-		done
+done
 		
 systemctl enable --now httpd
