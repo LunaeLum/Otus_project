@@ -48,9 +48,9 @@ mysql_secure_installation -p$pass
 
 if  [[ $(grep 'server-id' /etc/my.cnf) =~ ^server-id ]]
         then
-                sed -i -r "s/server-id=[0-9]/server-id=2" /etc/my.cnf
+                sed -i -r "s/server-id=[0-9]/server-id=2/" /etc/my.cnf
         else
-				sed -i "$a server-id=2" /etc/my.cnf
+				sed -i '$aserver-id=2' /etc/my.cnf
 fi
 
 
