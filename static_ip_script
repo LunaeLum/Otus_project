@@ -37,7 +37,7 @@ read addr
                                 then
                                         sed -i -r "s/IPADDR=([0-9]{1,3}\.){3}[0-9]{1,3}/IPADDR=$addr/" /etc/sysconfig/network-scripts/ifcfg-enp0s3
                                 else
-                                        sed -i "$a IPADDR=$addr" /etc/sysconfig/network-scripts/ifcfg-enp0s3
+                                        sed -i "4a\\IPADDR=$addr" /etc/sysconfig/network-scripts/ifcfg-enp0s3
                         fi
                 else
                         echo -e "Data entry error"
@@ -55,7 +55,7 @@ read netmask
                                 then
                                         sed -i -r "s/NETMASK=([0-9]{1,3}\.){3}[0-9]{1,3}/NETMASK=$netmask/" /etc/sysconfig/network-scripts/ifcfg-enp0s3
                                 else
-                                        sed -i "$a NETMASK=$netmask" /etc/sysconfig/network-scripts/ifcfg-enp0s3
+                                        sed -i "5a\\NETMASK=$netmask" /etc/sysconfig/network-scripts/ifcfg-enp0s3
                         fi
                 else
                         echo -e "Data entry error"
@@ -72,7 +72,7 @@ read gw
 				then
 					sed -i -r "s/GATEWAY=([0-9]{1,3}\.){3}[0-9]{1,3}/GATEWAY=$gw/" /etc/sysconfig/network-scripts/ifcfg-enp0s3
 				else
-                       			 sed -i "$a \\GATEWAY=$gw" /etc/sysconfig/network-scripts/ifcfg-enp0s3
+                       			 sed -i "6a\\GATEWAY=$gw" /etc/sysconfig/network-scripts/ifcfg-enp0s3
 			fi
 		else
                         echo -e "Data entry error"
@@ -88,7 +88,7 @@ read dns1
                                 then
                                         sed -i -r "s/DNS1=([0-9]{1,3}\.){3}[0-9]{1,3}/DNS1=$dns1/" /etc/sysconfig/network-scripts/ifcfg-enp0s3
                                 else
-                                         sed -i "$a \\DNS1=$dns1" /etc/sysconfig/network-scripts/ifcfg-enp0s3
+                                         sed -i "7a\\DNS1=$dns1" /etc/sysconfig/network-scripts/ifcfg-enp0s3
                         fi
                 else
                         echo -e "Data entry error"
@@ -104,7 +104,7 @@ read dns2
                                 then
                                         sed -i -r "s/DNS2=([0-9]{1,3}\.){3}[0-9]{1,3}/DNS2=$dns2/" /etc/sysconfig/network-scripts/ifcfg-enp0s3
                                 else
-                                         sed -i "$a \\DNS2=$dns2" /etc/sysconfig/network-scripts/ifcfg-enp0s3
+                                         sed -i "8a\\DNS2=$dns2" /etc/sysconfig/network-scripts/ifcfg-enp0s3
                         fi
                 else
                         echo -e "Data entry error"
