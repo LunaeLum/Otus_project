@@ -45,15 +45,15 @@ Listen $port
 <VirtualHost *:$port>
 #       ServerName www.example.com
 #       ServerAdmin webmaster@localhost
-DocumentRoot /var/www/html
+DocumentRoot /var/www/html$count
 ErrorLog /var/log/httpd/error$count.log
 CustomLog /var/log/httpd/access$count.log combined
 </VirtualHost>
 
 ####################################################
 EOF
-
-cat << EOF > /var/www/html/index.html
+mkdir /var/www/html$count
+cat << EOF > /var/www/html$count/index.html
 <h1> Welcome to Apache server on port $port </h1>
 EOF
 
