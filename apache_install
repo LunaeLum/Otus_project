@@ -4,7 +4,7 @@
 
 if_help=$1
 if [[ $if_help == "--help" || $if_help == "-h" ]]; then
-        echo "This script install Apache"
+        echo "This script install Nginx"
         echo "This script must be rn as root"
         echo "Exit status:" ; echo "0 if OK" ; echo "1 if script runs as not root"; echo "2 if Script has finished working" 
         exit 0
@@ -31,27 +31,27 @@ for (( count=1; count<=$var; count++ ))
         do
 				echo "Enter server port"
                 read port
-                         if [[ $port =~ ^[0-9]{1,5}$ ]]
-                                 then
+                        if [[ $port =~ ^[0-9]{1,5}$ ]]
+                                then
                                         echo > /dev/null
-                                 else
-                                        echo -e "\033[31m "Ошибка ввода данных"\e[0m"$'\n'
-                                        echo "Завершение работы скрипта"
-                                        exit 1
-                         fi
+                                else
+                                        echo -e "Data entry error"
+                                        echo "Script has finished working"
+                                        exit 2
+                        fi
 
 
 				cat << EOF > /etc/httpd/conf.d/for_upstream$var.conf
-						Listen $port
-						<VirtualHost *:$port>
-						#       ServerName www.example.com
-						#       ServerAdmin webmaster@localhost
-						DocumentRoot /var/www/html
-						ErrorLog /var/log/httpd/error$var.log
-						CustomLog /var/log/httpd/access$var.log combined
-						</VirtualHost>
-						
-						####################################################
+				Listen $port
+				<VirtualHost *:$port>
+				#       ServerName www.example.com
+				#       ServerAdmin webmaster@localhost
+				DocumentRoot /var/www/html
+				ErrorLog /var/log/httpd/error$var.log
+				CustomLog /var/log/httpd/access$var.log combined
+				</VirtualHost>
+				
+				####################################################
 				EOF
 
 
