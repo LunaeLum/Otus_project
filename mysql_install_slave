@@ -1,0 +1,80 @@
+#!/bin/bash
+
+#help
+
+if_help=$1
+if [[ "$if_help" == "--help" || "$if_help" == "-h" ]]; then
+        echo "This script install mysql as slave"
+        echo "This script must be run as root"
+        echo "Exit status:" ; echo "0 if OK" ; echo "1 if script runs as not root"
+        exit 0
+fi
+
+#root check
+
+if [ "$(id -u)" != '0' ]
+		then
+				echo -e "script runs without root rigths. Try try sudo bash $0"
+				exit 1
+fi
+
+#Download repositories for mysql
+rpm -U https://repo.mysql.com/mysql80-community-release-el7-6.noarch.rpm >> ~/mysql_installation.log
+rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+
+#Enabling repository
+sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
+
+#Install mysql
+yum --enablerepo=mysql80-community install -y mysql-community-server >> ~/mysql_installation.log
+
+#Manage server_id
+cat << EOF >>  /etc/my.cnf
+server-id=1
+EOF
+
+echo "Mysql installed"
+
+#Enable mysql
+systemctl enable --now mysqld.service >> ~/mysql_installation.log
+sleep 20
+
+#Changing temporary password
+read -p "Run secure installation. Changing the temporary password for root mysql. Press Enter to continue."
+pass=$(grep 'A temporary password' /var/log/mysqld.log |tail -1 |awk '{split($0,a,": "); print a[2]}')
+
+#Run secure installation
+mysql_secure_installation -p$pass
+
+if  [[ $(grep 'server-id' /etc/my.cnf) =~ ^server-id ]]
+        then
+                sed -i -r "s/server-id=[0-9]/server-id=2" /etc/my.cnf
+        else
+				sed -i "$a server-id=2" /etc/my.cnf
+fi
+
+
+#Creating user for replication 
+echo -e "Creating user for replication"
+echo -e "Enter username"
+read user
+echo $'\n'"Enter password"
+read -s pass
+
+echo $'\n'"Enter root password for mysql"
+mysql -uroot -p --database=mysql -e "CREATE USER '$user'@'%' IDENTIFIED WITH 'caching_sha2_password' BY '$pass';GRANT ALL PRIVILEGES ON *.* TO '$user'@'%' WITH GRANT OPTION"
+
+#Configure replication
+read -p "Configure replication master-slave. Press Enter to continue."
+echo -e   "Enter master IP address"
+read a3
+echo -e  "Enter username of mysql replication user"
+read a4
+echo -e  "Enter password of mysql replication user"
+read -s a5
+echo -e  "Enter master binlog file"
+read a6
+echo -e  "Enter master log pass"
+read a7
+echo -e  "Enter root password for mysql"
+mysql -uroot -p --database=mysql -e "CHANGE MASTER TO MASTER_HOST='$a3', MASTER_USER='$a4', MASTER_PASSWORD='$a5', MASTER_LOG_FILE='$a6', MASTER_LOG_POS=$a7, GET_MASTER_PUBLIC_KEY = 1; start slave"
