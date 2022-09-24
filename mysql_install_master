@@ -1,0 +1,38 @@
+#!/bin/bash
+#Download repositories for mysql
+rpm -U https://repo.mysql.com/mysql80-community-release-el7-6.noarch.rpm >> ~/mysql_installation.log
+rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+
+#Enabling repository
+sed -i 's/enabled=1/enabled=0/' /etc/yum.repos.d/mysql-community.repo
+
+#Install mysql
+yum --enablerepo=mysql80-community install -y mysql-community-server >> ~/mysql_installation.log
+
+#Manage server_id
+cat << EOF >>  /etc/my.cnf
+server-id=1
+EOF
+
+echo "Mysql installed"
+
+#Enable mysql
+systemctl enable --now mysqld.service >> ~/mysql_installation.log
+sleep 20
+
+#Changing temporary password
+read -p "Run secure installation. Changing the temporary password for root mysql. Press Enter to continue"
+pass=$(grep 'A temporary password' /var/log/mysqld.log |tail -1 |awk '{split($0,a,": "); print a[2]}')
+
+#Run secure installation
+mysql_secure_installation -p$pass
+
+#Creating user for replication 
+echo -e "Creating user for replication"
+echo -e "Enter username"
+read user
+echo $'\n'"Enter password"
+read -s pass
+
+echo $'\n'"Enter root password for mysql"
+mysql -uroot -p --database=mysql -e "CREATE USER '$user'@'%' IDENTIFIED WITH 'caching_sha2_password' BY '$pass';GRANT ALL PRIVILEGES ON *.* TO '$user'@'%' WITH GRANT OPTION; show master status"
