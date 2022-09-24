@@ -41,23 +41,23 @@ for (( count=1; count<=$var; count++ ))
                         fi
 
 
-				cat << EOF > /etc/httpd/conf.d/for_upstream$var.conf
-				Listen $port
-				<VirtualHost *:$port>
-				#       ServerName www.example.com
-				#       ServerAdmin webmaster@localhost
-				DocumentRoot /var/www/html
-				ErrorLog /var/log/httpd/error$var.log
-				CustomLog /var/log/httpd/access$var.log combined
-				</VirtualHost>
-				
-				####################################################
-				EOF
+cat << EOF > /etc/httpd/conf.d/for_upstream$var.conf
+Listen $port
+<VirtualHost *:$port>
+#       ServerName www.example.com
+#       ServerAdmin webmaster@localhost
+DocumentRoot /var/www/html
+ErrorLog /var/log/httpd/error$var.log
+CustomLog /var/log/httpd/access$var.log combined
+</VirtualHost>
+
+####################################################
+EOF
 
 
-				cat << EOF > /var/www/html/index.html
-				<h1> Welcome to Apache server on port $port </h1>
-				EOF
+cat << EOF > /var/www/html/index.html
+<h1> Welcome to Apache server on port $port </h1>
+EOF
 
 
 		done
