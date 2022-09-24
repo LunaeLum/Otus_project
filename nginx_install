@@ -18,11 +18,11 @@ if [ "$(id -u)" != '0' ]
 				exit 1
 fi
 
-#Установка nginx
+#Install nginx
 yum install -y epel-release >> ~/nginx_installation.log
 yum install -y nginx >> ~/nginx_installation.log
 
-#Настройка прокси
+#Configure proxy
 cat << EOF > /etc/nginx/default.d/proxy.conf
 location / {
         proxy_pass http://backend;
@@ -30,7 +30,7 @@ location / {
         }
 EOF
 
-#Настройка перенаправления потока
+#Configure upstreams
 
 cat << EOF > /etc/nginx/conf.d/upstream.conf
 upstream backend {
